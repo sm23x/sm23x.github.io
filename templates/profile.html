@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+  </head>
+  <body>
+    <header class="topBar">
+      <h1>Welcome, {{ username }}!</h1>
+      <div class="brand">
+        <span class="brandMark">GRAPHQL</span>
+        <span class="brandSub">Profile Hub</span>
+      </div>
+      <div class="userActions">
+        <div class="userChip">
+          <span class="userDot"></span>
+          <span class="loginName" id="login-name">Loading...</span>
+        </div>
+        <button class="ghost" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <div id="mainPage">
+        <section class="card intro">
+          <p class="eyebrow" id="welcomeEyebrow">Welcome!</p>
+          <h2 class="heroTitle">Your learning Progress</h2>
+          <p class="lead">
+            Track XP, project outcomes, and audit flow with a clearer, calmer
+            snapshot of your progress.
+          </p>
+          <div class="chipRow">
+            <span class="chip" data-target="xp-chart">XP</span>
+            <span class="chip" data-target="project-chart">Projects</span>
+            <span class="chip" data-target="audit-chart">Audits</span>
+            <span class="chip" data-target="skills-radar">Skills</span>
+          </div>
+        </section>
+        <section class="card overview" id="info"></section>
+        <section class="card metrics" id="stats"></section>
+        <section class="card skills" id="skills"></section>
+        <div class="dashboard charts">
+          <section class="card project chart" id="project-chart"></section>
+          <section class="card audit chart" id="audit-chart"></section>
+          <section class="card xp chart" id="xp-chart"></section>
+        </div>
+      </div>
+      <div class="skills row">
+        <section class="card skills chart" id="skills-chart"></section>
+        <section class="card skills radar" id="skills-radar"></section>
+      </div>
+    </main>
+    <script src="../static/scripts/auth.js"></script>
+    <script type="module" src="../static/scripts/profile.js"></script>
+  </body>
+</html>

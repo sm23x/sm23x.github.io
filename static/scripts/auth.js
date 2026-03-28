@@ -1,0 +1,35 @@
+const LOGIN_API = "https://learn.reboot01.com/api/auth/signin";
+
+async function login() {
+  const id = document.getElementById("login").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  try {    
+    // if (!localStorage.getItem("jwt")) location.href = "../index.html";
+    const res = await fetch(LOGIN_API, {
+      method: "POST",
+      headers: {
+        Authorization: "Basic " + btoa(`${id}:${password}`),
+      },
+    });
+    
+    if (!res.ok) throw new Error("Invalid credentials");
+
+    const token = await res.json();
+    localStorage.setItem("jwt", token);
+    location.href = "templates/profile.html";
+  } catch (e) {
+    let err = document.querySelector(".error");
+    if (!err) {
+      err = document.createElement("div");
+      err.className = "error";
+      document.querySelector(".authCard").appendChild(err);
+    }
+    err.textContent = e.message;
+  }
+}
+
+function logout() {
+  localStorage.removeItem("jwt");
+  location.href = "../index.html";
+}

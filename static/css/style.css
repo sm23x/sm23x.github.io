@@ -1,0 +1,720 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --bg:      #111010;
+  --surface: #161514;
+  --text:    #e8e3d5;
+  --muted:   #6b6760;
+  --dim:     #3a3835;
+  --border:  #252525;
+  --accent:  #2ec4a0;
+  --danger:  #c94f4f;
+  --font:    'Inter', system-ui, sans-serif;
+
+  /* chart sizing — read by JS via readCssNumber */
+  --skills-bar-height:      10;
+  --skills-bar-gap:         7;
+  --skills-label-width:     90;
+  --skills-bar-max-width:   180;
+  --skills-bar-radius:      2;
+  --skills-chart-padding:   4;
+  --skills-chart-right-pad: 32;
+  --skills-text-offset-y:   1;
+  --skills-count-offset-x:  6;
+
+  --donut-viewbox-width:    180;
+  --donut-viewbox-height:   160;
+  --donut-radius:           52;
+  --donut-rotation:         -90;
+  --donut-total-offset-y:   -2;
+  --donut-sub-offset-y:     18;
+
+  --flow-container-padding: 120;
+  --flow-bar-min:           200;
+  --flow-bar-max:           360;
+  --flow-bar-default:       220;
+  --flow-label-width:       80;
+  --flow-right-pad:         60;
+  --flow-chart-height:      110;
+  --flow-bar-height:        16;
+  --flow-done-y:            16;
+  --flow-receive-y:         66;
+  --flow-bar-radius:        2;
+  --flow-text-offset-y:     4;
+  --flow-value-offset-x:    10;
+
+  --xp-chart-width:         480;
+  --xp-chart-height:        320;
+  --xp-margin-top:          24;
+  --xp-margin-right:        40;
+  --xp-margin-bottom:       56;
+  --xp-margin-left:         44;
+  --xp-frame-radius:        2;
+  --xp-dot-radius:          6;
+  --xp-label-offset-y:      20;
+  --xp-total-offset-y:      52;
+
+  --radar-size:             320;
+  --radar-radius:           110;
+  --radar-rings:            4;
+  --radar-dot-radius:       3;
+  --radar-label-offset:     20;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+body.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  animation: slideUp 0.35s ease both;
+}
+
+.authCard h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.authCard .subtitle {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.authCard input {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 0;
+  margin-bottom: 1.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.authCard input::placeholder { color: var(--muted); }
+.authCard input:focus        { border-bottom-color: var(--text); }
+
+.authCard button {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.authCard button:hover { background: var(--text); color: var(--bg); }
+
+.error {
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--danger);
+  animation: fadeIn 0.2s ease both;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 54px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  gap: 1rem;
+}
+
+.topBar h1 { display: none; }
+
+.brand { display: flex; flex-direction: column; line-height: 1; }
+
+.brandMark {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+.brandSub {
+  font-size: 0.52rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(17,16,16,0.5);
+  margin-top: 2px;
+}
+
+.userActions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+
+.userChip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+
+.userDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+button.ghost {
+  padding: 0.35rem 0.9rem;
+  background: transparent;
+  border: 1px solid rgba(17,16,16,0.25);
+  color: var(--bg);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+button.ghost:hover { border-color: var(--bg); color: var(--bg); background: rgba(17,16,16,0.06); }
+
+/* ============================================================
+   DASHBOARD LAYOUT
+   ============================================================ */
+main.dashboard {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 54px 2rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+#mainPage {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+  overflow: visible;
+}
+
+/* ============================================================
+   CARD BASE — stripped to bare
+   ============================================================ */
+.card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border);
+  overflow: visible;
+  animation: fadeIn 0.4s ease both;
+  position: relative;
+  z-index: 1;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, z-index 0s;
+}
+.card::before { display: none; }
+.card:hover   {
+  transform: scale(1.08);
+  transform-origin: center center;
+  z-index: 20;
+  background: rgba(232, 227, 213, 0.08);
+  border-color: rgba(232, 227, 213, 0.3);
+  box-shadow:
+    inset 1px 0 0 rgba(232, 227, 213, 0.3),
+    inset 0 1px 0 rgba(232, 227, 213, 0.3),
+    0 12px 48px rgba(0, 0, 0, 0.7);
+  cursor: default;
+}
+
+/* ============================================================
+   INTRO / IDENTITY
+   ============================================================ */
+.card.intro {
+  grid-column: 1 / -1;
+  padding: 3rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  overflow: visible;
+}
+.card.intro::after { display: none; }
+
+.eyebrow {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--text);
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  margin-bottom: 0;
+}
+
+.lead { display: none; }
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  cursor: default;
+  transition: border-color 0.2s, color 0.2s;
+}
+.chip:hover  { border-color: var(--dim); color: var(--text); transform: none; box-shadow: none; background: transparent; }
+.chip.active { background: var(--text); color: var(--bg); border-color: var(--text); cursor: default; }
+
+.card.highlighted {
+  background: rgba(232, 227, 213, 0.04);
+  border-color: rgba(232, 227, 213, 0.18);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* ── Per-position hover border overrides ──
+   Default .card:hover adds inset left + inset top shadows.
+   Leftmost cards have no actual left border → remove left inset.
+   Top-row cards have no actual top border → remove top inset.   */
+
+/* Leftmost + top-row (overview): no left, no top */
+#mainPage > .card.overview:hover,
+.card.intro:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+/* Top-row only (metrics, skills): has left, no top */
+#mainPage > .card.metrics:hover,
+#mainPage > .card.skills:hover {
+  box-shadow:
+    inset 1px 0 0 rgba(232, 227, 213, 0.3),
+    0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+/* Leftmost in charts row (project): no left, has top */
+.dashboard.charts .card:first-child:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(232, 227, 213, 0.3),
+    0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+/* Leftmost in skills row (bar chart): no left, has top */
+.skills.row .card:first-child:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(232, 227, 213, 0.3),
+    0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+
+/* ============================================================
+   GRID PLACEMENT
+   ============================================================ */
+#mainPage > .card.overview { grid-column: span 4; border-right: 1px solid var(--border); padding: 2rem; }
+#mainPage > .card.metrics  { grid-column: span 4; border-right: 1px solid var(--border); padding: 2rem; }
+#mainPage > .card.skills   { grid-column: span 4; padding: 2rem; }
+
+.card.overview,
+.card.metrics,
+.card.skills   { min-height: 180px; }
+
+#mainPage > .card.overview:hover,
+#mainPage > .card.metrics:hover { border-color: rgba(232, 227, 213, 0.3); }
+
+/* charts row */
+.dashboard.charts {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  overflow: visible;
+}
+.dashboard.charts .card {
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 2rem;
+  min-height: 220px;
+}
+.dashboard.charts .card:last-child { border-right: none; }
+.dashboard.charts .card:hover { border-color: rgba(232, 227, 213, 0.3); }
+
+/* xp + radar row */
+.skills.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  overflow: visible;
+}
+.skills.row .card {
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem;
+}
+.skills.row .card:last-child { border-right: none; }
+.skills.row .card:hover { border-color: rgba(232, 227, 213, 0.3); }
+
+.card.skills.chart { overflow: hidden; }
+.card.skills.chart.scrollable { overflow-y: auto; max-height: 380px; }
+.card.xp.chart {
+  display: flex;
+  flex-direction: column;
+}
+.card.xp.chart .xp-graph {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+/* stagger */
+#mainPage .card:nth-child(1) { animation-delay: 0.05s; }
+#mainPage .card:nth-child(2) { animation-delay: 0.1s;  }
+#mainPage .card:nth-child(3) { animation-delay: 0.15s; }
+#mainPage .card:nth-child(4) { animation-delay: 0.2s;  }
+#mainPage .card:nth-child(5) { animation-delay: 0.25s; }
+#mainPage .card:nth-child(6) { animation-delay: 0.3s;  }
+
+/* ============================================================
+   CARD INNER ELEMENTS
+   ============================================================ */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-header h2 {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-title {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-title::before { display: none; }
+
+/* ── Stats ── */
+.stat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat:last-child { border-bottom: none; }
+
+.stat-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  text-align: right;
+  line-height: 1;
+}
+
+.stat-meta {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: default;
+  transition: border-color 0.2s, color 0.2s;
+}
+.badge:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+.badge-green { color: var(--accent); border-color: var(--accent); }
+.badge-rose  { color: var(--danger); border-color: var(--danger); }
+.badge-blue  { color: var(--text);   border-color: var(--dim); }
+.badge-amber { color: #c8a84b;       border-color: #c8a84b; }
+
+/* ── Split ── */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Ratio bar ── */
+.ratio-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin: 1rem 0 0.5rem;
+  border-radius: 0;
+}
+.ratio-fill {
+  height: 100%;
+  border-radius: 0;
+  transition: width 1.2s ease;
+}
+.ratio-unknown .ratio-fill { width: 30%; background: var(--dim); }
+.ratio-low     .ratio-fill { width: 40%; background: var(--danger); }
+.ratio-mid     .ratio-fill { width: 70%; background: #c8a84b; }
+.ratio-high    .ratio-fill { width: 100%; background: var(--accent); }
+
+/* ── Progress bar ── */
+.progress-wrap {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin-top: 0.5rem;
+  border-radius: 0;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0;
+  transition: width 1.2s ease;
+}
+
+/* ============================================================
+   SVG — BASE
+   ============================================================ */
+svg { width: 100%; height: auto; overflow: visible; }
+.skills-bars { overflow: hidden; }
+text { font-family: var(--font); fill: var(--muted); font-size: 10px; }
+
+/* ── XP line chart ── */
+.xp-graph { display: block; margin-top: 0.5rem; width: 100%; }
+.xp-frame { fill: rgba(255,255,255,0.02); stroke: var(--border); stroke-width: 1; }
+.xp-line  { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; filter: none; }
+.xp-dot   { fill: var(--accent); filter: none; }
+.xp-label { fill: var(--muted); font-size: 32px; }
+.xp-total { fill: var(--text); font-size: 36px; font-weight: 700; }
+
+/* ── Skills bar chart ── */
+.skills-bars { display: block; margin-top: 0.5rem; }
+.scrollable  { max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.chart-label { fill: var(--muted); font-size: 10px; }
+.bar-track   { fill: var(--border); }
+.bar-fill    { fill: var(--text); filter: none; }
+.chart-count { fill: var(--muted); font-size: 10px; }
+
+/* ── Donut chart ── */
+.donut-chart  { display: block; max-width: 180px; margin: 0.5rem auto; }
+.donut-track  { fill: none; stroke: var(--border); stroke-width: 20; }
+.donut-pass   { fill: none; stroke: var(--text);   stroke-width: 20; filter: none; }
+.donut-fail   { fill: none; stroke: var(--dim);    stroke-width: 20; filter: none; }
+.donut-total  { fill: var(--text); font-size: 20px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+.donut-sub    { fill: var(--muted); font-size: 9px; text-anchor: middle; letter-spacing: 0.06em; }
+
+.chart-legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 0.75rem; flex-wrap: wrap; }
+.legend-item  { display: flex; align-items: center; gap: 0.4rem; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.legend-swatch       { width: 8px; height: 8px; border-radius: 0; flex-shrink: 0; }
+.legend-swatch.pass  { background: var(--text); }
+.legend-swatch.fail  { background: var(--dim); border: 1px solid var(--border); }
+
+/* ── Flow / audit chart ── */
+.flow-chart   { display: block; margin-top: 0.5rem; width: 100%; }
+.flow-label   { fill: var(--muted); font-size: 13px; letter-spacing: 0.06em; }
+.flow-track   { fill: var(--border); }
+.flow-done    { fill: var(--text); filter: none; }
+.flow-receive { fill: var(--dim);  filter: none; }
+.flow-value   { fill: var(--text); font-size: 13px; font-weight: 600; }
+
+/* ── Radar chart ── */
+.radar-plot  { display: block; margin: 0.25rem auto; width: 100%; max-width: 100%; }
+.radar-grid  { fill: none; stroke: var(--border); stroke-width: 1; }
+.radar-axis  { stroke: var(--border); stroke-width: 1; }
+.radar-area  { fill: rgba(46, 196, 160, 0.18); stroke: var(--accent); stroke-width: 1.5; filter: none; }
+.radar-dot   { fill: var(--accent); filter: none; }
+.radar-label { fill: var(--muted); font-size: 10px; text-transform: capitalize; letter-spacing: 0.04em; }
+
+/* ============================================================
+   SKELETON
+   ============================================================ */
+.skeleton {
+  background: var(--border);
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+/* ============================================================
+   RESPONSIVE — ≤ 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  main.dashboard { padding: 0 1.25rem 4rem; }
+  .topBar        { padding: 0 1.25rem; height: 50px; }
+
+  #mainPage { grid-template-columns: 1fr 1fr; }
+  .card.intro              { grid-column: 1 / -1; padding: 2rem 0; }
+  #mainPage > .card.overview { grid-column: 1 / -1; border-right: none; padding: 1.5rem 0; }
+  #mainPage > .card.metrics  { grid-column: span 1; border-right: 1px solid var(--border); padding: 1.5rem; }
+  #mainPage > .card.skills   { grid-column: span 1; padding: 1.5rem; }
+
+  .dashboard.charts { grid-template-columns: 1fr; }
+  .dashboard.charts .card { border-right: none; }
+
+  .skills.row { grid-template-columns: 1fr; }
+  .skills.row .card { border-right: none; }
+
+  .heroTitle { font-size: 3rem; }
+  .brandSub  { display: none; }
+  .userChip .loginName { display: none; }
+}
+
+/* ============================================================
+   RESPONSIVE — ≤ 480px
+   ============================================================ */
+@media (max-width: 480px) {
+  .topBar h1 { display: none; }
+  .authCard  { padding: 2rem 1.25rem; }
+  .heroTitle { font-size: 2.25rem; }
+
+  #mainPage { grid-template-columns: 1fr; }
+  #mainPage > .card.metrics,
+  #mainPage > .card.skills { grid-column: 1 / -1; border-right: none; }
+
+  .split { grid-template-columns: 1fr; }
+}
