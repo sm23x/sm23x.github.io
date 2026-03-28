@@ -6,6 +6,9 @@
     <title>Login</title>
     <link rel="stylesheet" href="static/css/style.css" />
   </head>
+  <script>
+    if (localStorage.getItem("jwt")) location.replace("templates/profile.html");
+  </script>
   <body class="centered">
     <div class="authCard">
         <h1>Student Profile</h1>

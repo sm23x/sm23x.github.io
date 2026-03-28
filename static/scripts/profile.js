@@ -1,3 +1,5 @@
+if (!localStorage.getItem("jwt")) location.replace("../index.html");
+
 import {
   loadUser,
   auditRatio,
