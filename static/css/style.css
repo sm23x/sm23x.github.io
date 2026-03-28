@@ -684,8 +684,8 @@ text { font-family: var(--font); fill: var(--muted); font-size: 10px; }
    RESPONSIVE — ≤ 768px
    ============================================================ */
 @media (max-width: 768px) {
-  main.dashboard { padding: 0 1.25rem 4rem; }
-  .topBar        { padding: 0 1.25rem; height: 50px; }
+  main.dashboard { padding: 54px 1.25rem 4rem; }
+  .topBar        { padding: 0 1.25rem; height: 50px; gap: 0.5rem; }
 
   #mainPage { grid-template-columns: 1fr 1fr; }
   .card.intro              { grid-column: 1 / -1; padding: 2rem 0; }
@@ -701,7 +701,12 @@ text { font-family: var(--font); fill: var(--muted); font-size: 10px; }
 
   .heroTitle { font-size: 3rem; }
   .brandSub  { display: none; }
-  .userChip .loginName { display: none; }
+  .userChip .loginName {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 /* ============================================================
@@ -710,6 +715,7 @@ text { font-family: var(--font); fill: var(--muted); font-size: 10px; }
 @media (max-width: 480px) {
   .topBar h1 { display: none; }
   .authCard  { padding: 2rem 1.25rem; }
+  .userChip .loginName { max-width: 52px; }
   .heroTitle { font-size: 2.25rem; }
 
   #mainPage { grid-template-columns: 1fr; }
