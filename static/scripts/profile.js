@@ -1,5 +1,9 @@
 if (!localStorage.getItem("jwt")) location.replace("../index.html");
 
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted && !localStorage.getItem("jwt")) location.replace("../index.html");
+});
+
 import {
   loadUser,
   auditRatio,

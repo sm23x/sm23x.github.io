@@ -8,6 +8,9 @@
   </head>
   <script>
     if (localStorage.getItem("jwt")) location.replace("templates/profile.html");
+    window.addEventListener("pageshow", function(e) {
+      if (e.persisted && localStorage.getItem("jwt")) location.replace("templates/profile.html");
+    });
   </script>
   <body class="centered">
     <div class="authCard">
